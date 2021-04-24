@@ -31,6 +31,15 @@ struct CpuProcessesInfo {
   unsigned long long guestnice = 0;;
 };
 
+struct CpuProcessInfo {
+  int pid;
+  unsigned long utime;
+  unsigned long stime;
+  long cutime;
+  long cstime;
+  long starttime;
+};
+
 // System
 float MemoryUtilization();
 long UpTime();
@@ -54,17 +63,20 @@ enum CPUStates {
   kGuestNice_
 };
 CpuProcessesInfo CpuUtilization();
-long Jiffies();
-long ActiveJiffies();
+CpuProcessInfo CpuUtilization(int pid);
+
+void operator<<(CpuProcessInfo& cpuProcessInfo, std::ifstream& stream);
+
+// long Jiffies();
+// long ActiveJiffies();
 long ActiveJiffies(int pid);
-long IdleJiffies();
+// long IdleJiffies();
 
 // Processes
 std::string Command(int pid);
 std::string Ram(int pid);
-std::string Uid(int pid);
+int Uid(int pid);
 std::string User(int pid);
-long int UpTime(int pid);
 };  // namespace LinuxParser
 
 #endif
