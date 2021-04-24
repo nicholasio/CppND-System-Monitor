@@ -18,6 +18,19 @@ const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
+struct CpuProcessesInfo {
+  unsigned long long user = 0;
+  unsigned long long nice = 0;
+  unsigned long long system = 0;
+  unsigned long long idle = 0;
+  unsigned long long iowait = 0; 
+  unsigned long long irq = 0;
+  unsigned long long softirq = 0;
+  unsigned long long steal = 0;
+  unsigned long long guest = 0;
+  unsigned long long guestnice = 0;;
+};
+
 // System
 float MemoryUtilization();
 long UpTime();
@@ -40,7 +53,7 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
-std::vector<std::string> CpuUtilization();
+CpuProcessesInfo CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
