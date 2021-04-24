@@ -2,6 +2,7 @@
 
 #include <dirent.h>
 #include <unistd.h>
+#include <cmath>
 
 #include <sstream>
 #include <string>
@@ -68,11 +69,45 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  string line;
+  string key, unit;
+  float value;
 
-// TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  float mem_total, mem_free;
+  mem_total = mem_free = 0;
+
+  if(stream.is_open()) {
+    while(std::getline(stream, line)) {
+      std::istringstream linestream(line);
+
+      linestream >> key >> value >> unit;
+      if (key == "MemTotal:") {
+        mem_total = value;
+      } else if (key == "MemFree:") {
+        mem_free = value;
+      }
+    }
+  }
+
+  return ((mem_total - mem_free) / mem_total);
+}
+
+long LinuxParser::UpTime() {
+  long uptime = 0;
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
+  string line;
+  if(stream.is_open()) {
+    std::getline(stream, line);
+  
+    std::istringstream linestram(line);
+    linestram >> uptime;
+  }
+
+  return uptime;
+  
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
