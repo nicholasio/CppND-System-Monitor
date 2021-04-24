@@ -24,11 +24,6 @@ double Process::CpuUtilization() {
   
   double total_time = cpuProcessInfo.utime + cpuProcessInfo.stime + cpuProcessInfo.cutime + cpuProcessInfo.cstime;
   double seconds = uptime - (double(cpuProcessInfo.starttime) / double(sysconf(_SC_CLK_TCK)));
-  
-  if (seconds == 0) {
-    cpu_utilization = 0;
-    return 0;
-  } 
 
   cpu_utilization = ( (total_time / sysconf(_SC_CLK_TCK)) / seconds) * 100;
 
@@ -41,7 +36,7 @@ string Process::Ram() { return LinuxParser::Ram(this->Pid()); }
 
 string Process::User() {
   int uid = LinuxParser::Uid(this->Pid());
-  
+
   return LinuxParser::User(uid);
 }
 
